@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { palette } from 'styled-theme';
-import bgImage from '../../image/sign.jpg';
+import bgImage from '../../image/olon2.jpg';
 import WithDirection from '../../settings/withDirection';
 
 const SignInStyleWrapper = styled.div`
@@ -19,7 +19,7 @@ const SignInStyleWrapper = styled.div`
     width: 100%;
     height: 100%;
     display: flex;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.2);
     position: absolute;
     z-index: 1;
     top: 0;
@@ -69,6 +69,10 @@ const SignInStyleWrapper = styled.div`
       display: flex;
       flex-shrink: 0;
       flex-direction: column;
+
+      .ant-alert {
+        margin-bottom: 20px;
+      }
 
       .isoInputWrapper {
         margin-bottom: 15px;

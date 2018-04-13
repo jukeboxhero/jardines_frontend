@@ -7,6 +7,7 @@ import Button from '../../components/uielements/button';
 import IntlMessages from '../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
 import { signInUser } from '../../redux-token-auth-config'
+import Alert from "../../components/feedback/alert";
 
 class SignIn extends Component {
   state = {
@@ -20,7 +21,8 @@ class SignIn extends Component {
     this.state = {
       email: '',
       password: '',
-      submitted: false
+      submitted: false,
+      loginFailure: false
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -49,18 +51,24 @@ class SignIn extends Component {
       password,
     } = this.state;
 
-    signInUser({ email, password }) // <-<-<-<-<- here's the important part <-<-<-<-<-
+    signInUser({ email, password })
       .then( () => this.props.history.push('/dashboard'))
-      .catch( () => alert('login failed'));
+      .catch( () => this.setState({ loginFailure: true }));
   };
 
   render() {
     const from = { pathname: '/dashboard' };
-    const { redirectToReferrer, email, password } = this.state;
+    const { redirectToReferrer, email, password, loginFailure } = this.state;
 
     if (redirectToReferrer) {
       return <Redirect to={from} />;
     }
+
+    const loginError = loginFailure ? <Alert
+                  message="Your email or password is incorrect.  Please try again."
+                  type="error"
+                /> : '';
+
     return (
       <SignInStyleWrapper className="isoSignInPage">
         <div className="isoLoginContentWrapper">
@@ -72,6 +80,7 @@ class SignIn extends Component {
             </div>
 
             <div className="isoSignInForm">
+              {loginError}
               <div className="isoInputWrapper">
                 <Input size="large" placeholder="Email Address" name="email" value={email} onChange={this.handleChange} />
               </div>
@@ -114,7 +123,7 @@ class SignIn extends Component {
 }
 
 export default connect(
-  state => (console.log(state), {
+  state => ({
     isLoggedIn: state.reduxTokenAuth.currentUser.isSignedIn,
   }),
   { signInUser }

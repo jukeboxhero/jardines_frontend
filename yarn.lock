@@ -8083,6 +8083,13 @@ react-trend@^1.2.3:
   dependencies:
     prop-types "^15.5.8"
 
+react-validate-form@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/react-validate-form/-/react-validate-form-1.0.6.tgz#1a1cc278e4c774a31c319961c55ba2523b029aab"
+  dependencies:
+    lodash "^4.17.4"
+    rimraf "^2.6.0"
+
 react-vis@^1.7.2:
   version "1.9.2"
   resolved "https://registry.yarnpkg.com/react-vis/-/react-vis-1.9.2.tgz#4dbd5d91ac820fd39fa7ad1c892198495194f6e3"
@@ -8611,7 +8618,7 @@ right-align@^0.1.1:
   dependencies:
     align-text "^0.1.1"
 
-rimraf@^2.2.8, rimraf@^2.5.1, rimraf@^2.6.1, rimraf@2:
+rimraf@^2.2.8, rimraf@^2.5.1, rimraf@^2.6.0, rimraf@^2.6.1, rimraf@2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.6.2.tgz#2ed8150d24a16ea8651e6d6ef0f47c4158ce7a36"
   dependencies:

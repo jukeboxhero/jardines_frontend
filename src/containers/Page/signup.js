@@ -1,22 +1,58 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Input from '../../components/uielements/input';
+import Form from '../../components/uielements/form';
+import { Input } from 'antd';
 import Checkbox from '../../components/uielements/checkbox';
 import Button from '../../components/uielements/button';
 import authAction from '../../redux/auth/actions';
-import Auth0 from '../../helpers/auth0/index';
-import Firebase from '../../helpers/firebase';
-import FirebaseLogin from '../../components/firebase';
 import IntlMessages from '../../components/utility/intlMessages';
 import SignUpStyleWrapper from './signup.style';
+import { registerUser } from '../../redux-token-auth-config';
+import Facebook from '../../helpers/oauth/facebook';
+import { verifyCredentials } from '../../redux-token-auth-config';
+import { store } from '../../redux/store';
+
+const FormItem = Form.Item;
 
 const { login } = authAction;
 
+
+const authKeys = {
+  'access-token': 'auth_token',
+  'client': 'client_id',
+  'expiry': 'expiry',
+  'uid': 'uid'
+};
+
 class SignUp extends Component {
-  state = {
-    redirectToReferrer: false
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      redirectToReferrer: false
+    };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.facebookSignup = this.facebookSignup.bind(this);
+    this.googleSignup = this.googleSignup.bind(this);
+
+    window.addEventListener('message', this.receiveMessage);
+  }
+
+  receiveMessage(event) {
+    switch(event.data.message) {
+      case 'deliverCredentials':
+        for (var key in authKeys) {
+          let value = authKeys[key];
+          localStorage.setItem(key, event.data[value])
+        };
+        localStorage['token-type'] = 'Bearer';
+        verifyCredentials(store);
+        window.location.replace('/dashboard');
+    }
+  }
+  
   componentWillReceiveProps(nextProps) {
     if (
       this.props.isLoggedIn !== nextProps.isLoggedIn &&
@@ -25,12 +61,51 @@ class SignUp extends Component {
       this.setState({ redirectToReferrer: true });
     }
   }
-  handleLogin = () => {
-    const { login } = this.props;
-    login();
-    this.props.history.push('/dashboard');
+
+  handleSubmit(e) {
+    e.preventDefault();
+
+    const form = this.props.form;
+    const { registerUser } = this.props
+
+    form.validateFields((err, values) => {
+      if (!err) {
+        registerUser(values)
+          .then( () => this.props.history.push('/dashboard'))
+          .catch( () => this.setState({ registrationFailure: true }));
+      }
+    });
+  }
+
+  facebookSignup(e) {
+    e.preventDefault();
+    window.open(`${process.env.FB_LOGIN_URL}?omniauth_window_type=newWindow`, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+  }
+
+  googleSignup(e) {
+    e.preventDefault();
+    window.open(`${process.env.GOOGLE_OAUTH2_LOGIN_URL}?omniauth_window_type=newWindow`, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+  }
+
+  checkPassword = (rule, value, callback) => {
+    const form = this.props.form;
+    if (value && value !== form.getFieldValue('password')) {
+      callback('Your password confirmation must match your password.');
+    } else {
+      callback();
+    }
   };
+  checkConfirm = (rule, value, callback) => {
+    const form = this.props.form;
+    if (value && this.state.confirmDirty) {
+      form.validateFields(['confirm'], { force: true });
+    }
+    callback();
+  };
+
   render() {
+    const { getFieldDecorator } = this.props.form;
+
     return (
       <SignUpStyleWrapper className="isoSignUpPage">
         <div className="isoSignUpContentWrapper">
@@ -41,71 +116,112 @@ class SignUp extends Component {
               </Link>
             </div>
 
-            <div className="isoSignUpForm">
-              <div className="isoInputWrapper isoLeftRightComponent">
-                <Input size="large" placeholder="First name" />
-                <Input size="large" placeholder="Last name" />
-              </div>
+            <Form onSubmit={this.handleSubmit}>
+              <div className="isoSignUpForm">
+                <div className="isoInputWrapper isoLeftRightComponent">
+                  <FormItem>
+                    {getFieldDecorator('firstName', {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Please enter your first name.',
+                        },
+                      ],
+                    })(<Input size="large" placeholder="First name" />)}
+                  </FormItem>
 
-              <div className="isoInputWrapper">
-                <Input size="large" placeholder="Username" />
-              </div>
+                  <FormItem>
+                    {getFieldDecorator('lastName', {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Please enter your last name(s).',
+                        },
+                      ],
+                    })(<Input size="large" placeholder="Last name" />)}
+                  </FormItem>
+                </div>
 
-              <div className="isoInputWrapper">
-                <Input size="large" placeholder="Email" />
-              </div>
+                <FormItem hasFeedback>
+                  {getFieldDecorator('email', {
+                    rules: [
+                      {
+                        type: 'email',
+                        message: 'The input is not a valid E-mail.',
+                      },
+                      {
+                        required: true,
+                        message: 'Please enter your E-mail.',
+                      },
+                    ],
+                  })(
+                    <Input size="large" placeholder="Email" />
+                  )}
+                </FormItem>
 
-              <div className="isoInputWrapper">
-                <Input size="large" type="password" placeholder="Password" />
-              </div>
+                <FormItem hasFeedback>
+                  {getFieldDecorator('password', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please enter your password.',
+                      },
+                      {
+                        validator: this.checkConfirm,
+                      },
+                    ],
+                  })(
+                    <Input size="large" type="password" placeholder="Password" />
+                  )}
+                </FormItem>
+                <FormItem hasFeedback>
+                  {getFieldDecorator('confirm', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please confirm your password.',
+                      },
+                      {
+                        validator: this.checkPassword,
+                      },
+                    ],
+                  })(
+                    <Input
+                      size="large"
+                      type="password"
+                      placeholder="Confirm Password"
+                    />
+                  )}
+                </FormItem>
 
-              <div className="isoInputWrapper">
-                <Input
-                  size="large"
-                  type="password"
-                  placeholder="Confirm Password"
-                />
-              </div>
+                <div className="isoInputWrapper" style={{ marginBottom: '50px' }}>
+                  <Checkbox>
+                    <IntlMessages id="page.signUpTermsConditions" />
+                  </Checkbox>
+                </div>
 
-              <div className="isoInputWrapper" style={{ marginBottom: '50px' }}>
-                <Checkbox>
-                  <IntlMessages id="page.signUpTermsConditions" />
-                </Checkbox>
-              </div>
-
-              <div className="isoInputWrapper">
-                <Button type="primary">
-                  <IntlMessages id="page.signUpButton" />
-                </Button>
-              </div>
-              <div className="isoInputWrapper isoOtherLogin">
-                <Button onClick={this.handleLogin} type="primary btnFacebook">
-                  <IntlMessages id="page.signUpFacebook" />
-                </Button>
-                <Button onClick={this.handleLogin} type="primary btnGooglePlus">
-                  <IntlMessages id="page.signUpGooglePlus" />
-                </Button>
-                {Auth0.isValid && (
-                  <Button
-                    onClick={() => {
-                      Auth0.login(this.handleLogin);
-                    }}
-                    type="primary btnAuthZero"
-                  >
-                    <IntlMessages id="page.signUpAuth0" />
+                <div className="isoInputWrapper">
+                  <FormItem>
+                    <Button type="primary" htmlType="submit">
+                      <IntlMessages id="page.signUpButton" />
+                    </Button>
+                  </FormItem>
+                </div>
+                <div className="isoInputWrapper isoOtherLogin">
+                  <Button type="primary btnFacebook" onClick={this.facebookSignup}>
+                    <IntlMessages id="page.signUpFacebook" />
                   </Button>
-                )}
-
-                {Firebase.isValid && (
-                  <FirebaseLogin signup={true} login={this.handleLogin} />
-                )}
+                  <Button type="primary btnGooglePlus" onClick={this.googleSignup}>
+                    <IntlMessages id="page.signUpGooglePlus" />
+                  </Button>
+                </div>
+                <div className="isoInputWrapper isoCenterComponent isoHelperWrapper">
+                  <Link to="/signin">
+                    <IntlMessages id="page.signUpAlreadyAccount" />
+                  </Link>
+                </div>
               </div>
-              <div className="isoInputWrapper isoCenterComponent isoHelperWrapper">
-                <Link to="/signin">
-                  <IntlMessages id="page.signUpAlreadyAccount" />
-                </Link>
-              </div>
-            </div>
+            </Form>
           </div>
         </div>
       </SignUpStyleWrapper>
@@ -113,9 +229,13 @@ class SignUp extends Component {
   }
 }
 
+const WrappedSignup = Form.create()(SignUp);
+
 export default connect(
   state => ({
     isLoggedIn: state.reduxTokenAuth.currentUser.isSignedIn
   }),
-  { login }
-)(SignUp);
+  { login, registerUser }
+)(WrappedSignup);
+
+

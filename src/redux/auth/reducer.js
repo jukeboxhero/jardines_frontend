@@ -3,6 +3,7 @@ import actions from './actions';
 
 const initState = new Map({ 
   idToken: null,
+  loginFailure: false,
   reduxTokenAuth: {
     currentUser: {
       isLoading: false,
@@ -17,10 +18,11 @@ const initState = new Map({
 export default function authReducer(state = initState, action) {
   switch (action.type) {
     case actions.LOGIN_SUCCESS:
-      alert('pleae work');
       return state.set('reduxTokenAuth.currentUser.isSignedIn', true);
     case actions.LOGOUT:
       return initState;
+    case actions.LOGIN_ERROR:
+      return state.set('loginFailure', true );
     default:
       return state;
   }

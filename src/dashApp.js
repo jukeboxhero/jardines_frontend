@@ -13,9 +13,6 @@ import config, {
 import { themeConfig } from './settings';
 import DashAppHolder from './dashAppStyle';
 import Boot from './redux/boot';
-import { verifyCredentials } from './redux-token-auth-config';
-
-// verifyCredentials(store);
 
 const currentAppLocale =
   AppLocale[getCurrentLanguage(config.defaultLanguage || 'english').locale];

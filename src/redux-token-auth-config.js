@@ -6,6 +6,7 @@ const config = {
     firstName: 'first_name',
     lastName: 'last_name',
     imageUrl: 'image',
+    passwordConfirmation: 'password_confirmation'
   },
   userRegistrationAttributes: {
     firstName: 'first_name',

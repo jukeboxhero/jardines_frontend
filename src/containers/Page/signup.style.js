@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { palette } from 'styled-theme';
-import bgImage from '../../image/work.jpg';
+import bgImage from '../../image/olon1.jpg';
 import WithDirection from '../../settings/withDirection';
 
 const SignUpStyleWrapper = styled.div`
@@ -19,7 +19,7 @@ const SignUpStyleWrapper = styled.div`
     width: 100%;
     height: 100%;
     display: flex;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.3);
     position: absolute;
     z-index: 1;
     top: 0;
