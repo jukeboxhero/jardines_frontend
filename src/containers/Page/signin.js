@@ -26,6 +26,8 @@ class SignIn extends Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.facebookSignIn = this.facebookSignIn.bind(this);
+    this.googleSignIn = this.googleSignIn.bind(this);
   };
 
   componentWillReceiveProps(nextProps) {
@@ -44,8 +46,6 @@ class SignIn extends Component {
 
   handleLogin = () => {
     const { signInUser } = this.props;
-    // login();
-
     const {
       email,
       password,
@@ -55,6 +55,16 @@ class SignIn extends Component {
       .then( () => this.props.history.push('/dashboard'))
       .catch( () => this.setState({ loginFailure: true }));
   };
+
+  facebookSignIn(e) {
+    e.preventDefault();
+    window.open(`${process.env.FB_LOGIN_URL}?omniauth_window_type=newWindow`, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+  }
+
+  googleSignIn(e) {
+    e.preventDefault();
+    window.open(`${process.env.GOOGLE_OAUTH2_LOGIN_URL}?omniauth_window_type=newWindow`, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+  }
 
   render() {
     const from = { pathname: '/dashboard' };
@@ -99,10 +109,10 @@ class SignIn extends Component {
               </div>
 
               <div className="isoInputWrapper isoOtherLogin">
-                <Button onClick={this.handleLogin} type="primary btnFacebook">
+                <Button onClick={this.facebookSignIn} type="primary btnFacebook">
                   <IntlMessages id="page.signInFacebook" />
                 </Button>
-                <Button onClick={this.handleLogin} type="primary btnGooglePlus">
+                <Button onClick={this.googleSignIn} type="primary btnGooglePlus">
                   <IntlMessages id="page.signInGooglePlus" />
                 </Button>
               </div>

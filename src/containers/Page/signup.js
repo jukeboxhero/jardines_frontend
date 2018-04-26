@@ -5,25 +5,11 @@ import Form from '../../components/uielements/form';
 import { Input } from 'antd';
 import Checkbox from '../../components/uielements/checkbox';
 import Button from '../../components/uielements/button';
-import authAction from '../../redux/auth/actions';
 import IntlMessages from '../../components/utility/intlMessages';
 import SignUpStyleWrapper from './signup.style';
 import { registerUser } from '../../redux-token-auth-config';
-import Facebook from '../../helpers/oauth/facebook';
-import { verifyCredentials } from '../../redux-token-auth-config';
-import { store } from '../../redux/store';
 
 const FormItem = Form.Item;
-
-const { login } = authAction;
-
-
-const authKeys = {
-  'access-token': 'auth_token',
-  'client': 'client_id',
-  'expiry': 'expiry',
-  'uid': 'uid'
-};
 
 class SignUp extends Component {
   constructor(props) {
@@ -36,21 +22,6 @@ class SignUp extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.facebookSignup = this.facebookSignup.bind(this);
     this.googleSignup = this.googleSignup.bind(this);
-
-    window.addEventListener('message', this.receiveMessage);
-  }
-
-  receiveMessage(event) {
-    switch(event.data.message) {
-      case 'deliverCredentials':
-        for (var key in authKeys) {
-          let value = authKeys[key];
-          localStorage.setItem(key, event.data[value])
-        };
-        localStorage['token-type'] = 'Bearer';
-        verifyCredentials(store);
-        window.location.replace('/dashboard');
-    }
   }
   
   componentWillReceiveProps(nextProps) {
@@ -235,7 +206,7 @@ export default connect(
   state => ({
     isLoggedIn: state.reduxTokenAuth.currentUser.isSignedIn
   }),
-  { login, registerUser }
+  { registerUser }
 )(WrappedSignup);
 
 

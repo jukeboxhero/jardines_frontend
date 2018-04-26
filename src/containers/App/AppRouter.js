@@ -276,6 +276,10 @@ const routes = [
     path: "chat",
     component: asyncComponent(() => import("../Chat"))
   },
+  {
+    path: "admin/users",
+    component: asyncComponent(() => import("../Admin/Users"))
+  },
   ...customRoutes
 ];
 

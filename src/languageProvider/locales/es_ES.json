@@ -79,6 +79,8 @@
   "sidebar.blankPage": "Página en blanco",
   "sidebar.githubSearch": "Github Buscar",
   "sidebar.youtubeSearch": "Búsqueda de Youtube",
+  "sidebar.admin": "Administracion",
+  "sidebar.admin.users": "Usarios",
   "languageSwitcher.label": "Cambiar idioma",
   "themeSwitcher": "Selector de temas",
   "themeSwitcher.Sidebar": "Barra lateral",

@@ -78,6 +78,8 @@
   "sidebar.blankPage": "Blank Page",
   "sidebar.githubSearch": "Github Search",
   "sidebar.youtubeSearch": "Youtube Search",
+  "sidebar.admin": "Administration",
+  "sidebar.admin.users": "Users",
   "languageSwitcher.label": "Change Language",
   "themeSwitcher": "Theme Switcher",
   "themeSwitcher.Sidebar": "Sidebar",

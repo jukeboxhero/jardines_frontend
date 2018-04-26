@@ -338,4 +338,18 @@ const options = [
   },
   ...getDevSidebar
 ];
+
+// TODO: If the user is admin...
+options.push({
+  key: "admin",
+  label: "sidebar.admin",
+  leftIcon: "ion-document-text",
+  children: [
+    {
+      key: "admin/users",
+      label: "sidebar.admin.users"
+    }
+  ]
+});
+
 export default options;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
 import { connect } from 'react-redux';
 
@@ -60,6 +60,7 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
             Auth0.handleAuthentication(props);
           }}
         />
+        
         <Route
           path="/dashboard"
           component={requireSignIn(App)}
