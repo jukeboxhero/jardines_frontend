@@ -50,6 +50,12 @@ const TableWrapper = styled(Table)`
         color: ${palette('primary', 4)};
       }
     }
+
+    .actions {
+      a:not(:first-child) {
+        margin-left: 10px;
+      }
+    }
   }
 
   .ant-table-thead > tr.ant-table-row-hover > td,

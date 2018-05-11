@@ -15,11 +15,18 @@ import Invoices from './invoice/reducer';
 import LanguageSwitcher from './languageSwitcher/reducer';
 import YoutubeSearch from './youtubeSearch/reducers';
 import DevReducers from '../customApp/redux/reducers';
+
+
+import Users from './users/reducer';
+
 import { reduxTokenAuthReducer } from 'redux-token-auth'
 
 export default {
   Auth,
   App,
+  Users,
+
+  
   ThemeSwitcher,
   LanguageSwitcher,
   Mails,

@@ -631,6 +631,7 @@
   "antTable.title.street": "Calle",
   "antTable.title.email": "Email",
   "antTable.title.dob": "DOB",
+  "antTable.title.role": "Posición",
   "Map.leaflet.basicTitle": "Mapa básico",
   "Map.leaflet.basicMarkerTitle": "Mapa básico (con marcador predeterminado  ",
   "Map.leaflet.leafletCustomMarkerTitle":

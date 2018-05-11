@@ -43,6 +43,12 @@ const columns = [
     render: object => renderCell(object, 'TextCell', 'lastName')
   },
   {
+    title: <IntlMessages id="antTable.title.role" />,
+    key: 'role',
+    width: 100,
+    render: object => renderCell(object, 'TextCell', 'role')
+  },
+  {
     title: <IntlMessages id="antTable.title.city" />,
     key: 'city',
     width: 200,
@@ -67,30 +73,16 @@ const columns = [
     render: object => renderCell(object, 'DateCell', 'date')
   }
 ];
-const smallColumns = [columns[1], columns[2], columns[3], columns[4]];
-const sortColumns = [
-  { ...columns[1], sorter: true },
-  { ...columns[2], sorter: true },
-  { ...columns[3], sorter: true },
-  { ...columns[4], sorter: true }
-];
+
 const editColumns = [
+  columns[0],
   { ...columns[1], width: 300 },
   { ...columns[2], width: 300 },
   columns[3],
-  columns[4]
+  columns[4],
+  columns[5],
 ];
-const groupColumns = [
-  columns[0],
-  {
-    title: 'Name',
-    children: [columns[1], columns[2]]
-  },
-  {
-    title: 'Address',
-    children: [columns[3], columns[4]]
-  }
-];
+
 const tableinfo = {
   title: 'Editable View',
   value: 'editView',

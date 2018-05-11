@@ -1,6 +1,7 @@
 import React from 'react';
 import ImageCellView from './imageCell';
 import DeleteCell from './deleteCell';
+import EditCell from './editCell';
 import EditableCell from './editableCell';
 import FilterDropdown from './filterDropdown';
 
@@ -16,5 +17,6 @@ export {
   TextCell,
   EditableCell,
   DeleteCell,
+  EditCell,
   FilterDropdown
 };

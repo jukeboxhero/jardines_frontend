@@ -613,6 +613,7 @@
   "antTable.title.street": "Street",
   "antTable.title.email": "Email",
   "antTable.title.dob": "DOB",
+  "antTable.title.role": "Role",
   "Map.leaflet.basicTitle": "Basic Map",
   "Map.leaflet.basicMarkerTitle": "Basic Map(With Default Marker",
   "Map.leaflet.leafletCustomMarkerTitle": "Basic Map(With Custom Icon Marker)",
